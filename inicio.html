@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1c1c1c;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #212121;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .btn-custom {
+            background-color: #ffc107;
+            border: none;
+            color: #1c1c1c; 
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-custom:hover {
+            background-color: #704c04;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <p>Crud Cristhian Mendes</p>
+    <h2 style="color: #ffc107; font-weight: bold;">Cadastro</h2>
+    <form action="./salvar.php" method="get" onsubmit="return validarForm()">
+        <div class="form-group">
+            <label for="nome">Insira seu nome completo:</label>
+            <input type="text" class="form-control" id="nome" name="nome">
+        </div>
+        <div class="form-group">
+            <label for="nickName">Digite seu Nome de usuário:</label>
+            <input type="text" class="form-control" id="nickName" name="nickName">
+        </div>
+        <div class="form-group">
+            <label for="password">Insira sua senha:</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="Rpassword">Repita sua senha:</label>
+            <input type="password" class="form-control" id="Rpassword" name="Rpassword">
+        </div>
+        <div class="form-group">
+            <label for="cep">Insira seu CEP:</label>
+            <input type="text" class="form-control" id="cep" name="cep">
+            <button type="button" class="btn btn-custom" onclick="buscarEndereco()">Pesquisar CEP</button>
+        </div>
+        <div class="resultado-endereco" id="resultado-endereco"></div>
+        <button type="submit" class="btn btn-custom">Enviar</button>
+    </form>
+</div>
+
+<style>
+    label {
+        color: #704c04;
+    }
+
+    button {
+        color: #1c1c1c;
+    }
+
+    p {
+        color: #704c04; font-weight: bold;
+    }
+
+    .resultado-endereco {
+        background-color: #ffc107;
+        color: #1c1c1c;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function buscarEndereco() {
+        var cep = document.getElementById('cep').value;
+        var resultadoEndereco = document.getElementById('resultado-endereco');
+
+        if (cep) {
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://viacep.com.br/ws/' + cep + '/xml/', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    
+                    resultadoEndereco.innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        } else {
+            resultadoEndereco.innerHTML = '';
+        }
+    }
+
+    function validarForm() {
+        var nome = document.getElementById('nome').value;
+        var nickName = document.getElementById('nickName').value;
+        var password = document.getElementById('password').value;
+        var rpassword = document.getElementById('Rpassword').value;
+
+        if (nome === '') {
+            alert('Por favor, preencha o campo Nome completo.');
+            return false;
+        } else if (nome.length < 6) {
+            alert('O campo Nome completo deve ter pelo menos 6 caracteres.');
+            return false;
+        }
+
+        if (nickName === '') {
+            alert('Por favor, preencha o campo Nome de usuário.');
+            return false;
+        } else if (nickName.length < 6) {
+            alert('O campo Nome de usuário deve ter pelo menos 6 caracteres.');
+            return false;
+        }
+
+        if (password === '') {
+            alert('Por favor, preencha o campo Senha.');
+            return false;
+        } else if (password.length < 6) {
+            alert('A senha é muito curta! Ela deve ter pelo menos 6 caracteres.');
+            return false;
+        } else if (password !== rpassword) {
+            alert('As senhas são diferentes!');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>
